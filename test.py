@@ -43,10 +43,10 @@ def eval_both_ope(loader, model):
     return val_res_psnr.item(), val_res_ssim.item()
 
 
-def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=False):
+def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=None):
     model.eval()
     if up_down is None:
-        up_down = False
+        up_down = 1
     metric_fn_ssim = utils.calc_ssim
     if eval_type is None:
         metric_fn_psnr = utils.calc_psnr
@@ -71,8 +71,8 @@ def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=False
             batch_lr = batch['lr'].cuda()
             gt = batch['gt'].cuda()
             gt_size = gt.shape[-2:]
-            if up_down:
-                pred, run_time = model.inference(batch_lr, h=gt_size[0] * 2, w=gt_size[1] * 2)
+            if up_down != 1:
+                pred, run_time = model.inference(batch_lr, h=gt_size[0] * up_down, w=gt_size[1] * up_down)
                 pred.clamp_(-1, 1)
                 pred = resize_img(pred, (gt_size[0], gt_size[1])).cuda()
 
@@ -99,20 +99,24 @@ def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=False
                                                       avg_time_all.item()]
 
 
-def single_img_sr(lr_img, model, h, w, gt=None, up_down=False):
+def single_img_sr(lr_img, model, h, w, gt=None, up_down=None, flip=None):
     model.eval()
     if up_down is None:
-        up_down = False
+        up_down = 1
     with torch.no_grad():
         # pred, run_time = model.inference(lr_img, h=h, w=w)
         # pred.clamp_(-1, 1)
-        if up_down:
-            pred, run_time = model.inference(lr_img, h=h * 2, w=w * 2)
+        if flip is not None:
+            pred, run_time = model.inference(lr_img, h=h, w=w, flip_conf=flip)
             pred.clamp_(-1, 1)
-            pred = resize_img(pred, (h, w)).cuda()
         else:
-            pred, run_time = model.inference(lr_img, h=h, w=w)
-            pred.clamp_(-1, 1)
+            if up_down != 1:
+                pred, run_time = model.inference(lr_img, h=h * up_down, w=w * up_down)
+                pred.clamp_(-1, 1)
+                pred = resize_img(pred, (h, w)).cuda()
+            else:
+                pred, run_time = model.inference(lr_img, h=h, w=w)
+                pred.clamp_(-1, 1)
 
         if gt is not None:
             metric_fn_psnr = utils.calc_psnr
@@ -127,7 +131,7 @@ def single_img_sr(lr_img, model, h, w, gt=None, up_down=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-001_exp01')
-    parser.add_argument('--ckpt_name', default='epoch-190.pth')
+    parser.add_argument('--ckpt_name', default='epoch-1000.pth')
     parser.add_argument('--test_config', default='configs/test-CIRnet/test_CIR-SR-div2k-x4.yaml')
     parser.add_argument('--gpu', default='2')
     args = parser.parse_args()

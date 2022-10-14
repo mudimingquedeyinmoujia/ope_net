@@ -647,7 +647,7 @@ class SwinIR(nn.Module):
         resi_connection: The convolutional block before residual connection. '1conv'/'3conv'
     """
 
-    def __init__(self, img_size=48, patch_size=1, in_chans=3,
+    def __init__(self, img_size=48, patch_size=1, in_chans=3, num_feat=147,
                  embed_dim=180, depths=[6, 6, 6, 6, 6, 6], num_heads=[6, 6, 6, 6, 6, 6],
                  window_size=8, mlp_ratio=2., qkv_bias=True, qk_scale=None,
                  drop_rate=0., attn_drop_rate=0., drop_path_rate=0.1,
@@ -657,7 +657,6 @@ class SwinIR(nn.Module):
         super(SwinIR, self).__init__()
         num_in_ch = in_chans
         num_out_ch = in_chans
-        num_feat = 64
         self.img_range = img_range
         if in_chans == 3:
             rgb_mean = (0.4488, 0.4371, 0.4040)
@@ -860,7 +859,7 @@ class SwinIR(nn.Module):
         return flops
 
 @register('swinir')
-def make_swinir(no_upsampling=True):
-    return SwinIR()
+def make_swinir(no_upsampling=True, num_feat=147):
+    return SwinIR(num_feat=num_feat)
 
 

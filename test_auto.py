@@ -110,7 +110,7 @@ from test import eval_both_ope, test_both_ope, single_img_sr
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-002_exp01')
+    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-005_exp01')
     parser.add_argument('--test_config', default='configs/test-CIRnet/test_CIR-SR-div2k-x4.yaml')
     parser.add_argument('--gpu', default='1')
     args = parser.parse_args()

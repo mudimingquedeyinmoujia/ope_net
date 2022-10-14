@@ -8,3 +8,6 @@ from . import rcan_backbone
 from . import OPE_net
 from . import adaptive_rdn
 from . import adaptive_edsr
+from . import OPE_net_flip
+from . import OPE_net_ablation
+from . import swinir
