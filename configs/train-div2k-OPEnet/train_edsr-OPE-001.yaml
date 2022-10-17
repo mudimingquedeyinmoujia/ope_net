@@ -39,21 +39,19 @@ model:
   args:
     max_freq: 3
     srnet_spec:
-      name: rdn
+      name: adaptive-edsr-baseline
       args:
         n_feats: 147
-        RDNconfig: B
-        RDNkSize: 3
 
 optimizer:
   name: adam
   args:
     lr: 1.e-4
 
-epoch_max: 1000
+epoch_max: 500
 
 multi_step_lr:
-  milestones: [200, 400, 600, 800]
+  milestones: [100, 200, 300, 400]
   gamma: 0.5
 
 epoch_val: 1

@@ -14,7 +14,7 @@ import utils
 from test import single_img_sr
 import random
 import time
-from cut_img_bicubic import cut_img_dir, resize_img
+from cut_img_bicubic import cut_img_dir, resize_img, resize_img_near
 
 
 def prepare_training():
@@ -64,6 +64,7 @@ def main(config_, save_path, args):
         img_lr = myutils.load_imageToten(loadpath=args.hr_path, resize=(tmp_h, tmp_w)).cuda()
         sr_img, psnr_model, ssim_model, run_time = single_img_sr(img_lr, model, h=h, w=w, gt=img_hr)
         bic_sr_img = resize_img(img_lr, size=(h, w)).cuda()
+        near_sr_img = resize_img_near(img_lr, size=(h, w)).cuda()
         metric_fn_psnr = utils.calc_psnr
         metric_fn_ssim = utils.calc_ssim
         psnr_bic = metric_fn_psnr((bic_sr_img + 1) / 2, (img_hr + 1) / 2)
@@ -72,15 +73,22 @@ def main(config_, save_path, args):
 
         sr_img_cut, cut_size1 = cut_img_dir(sr_img, cut_ratio[0], cut_ratio[1], cut_ratio[2], cut_ratio[3])
         bic_sr_img_cut, cut_size2 = cut_img_dir(bic_sr_img, cut_ratio[0], cut_ratio[1], cut_ratio[2], cut_ratio[3])
-        myutils.save_tenimage(imgTensor=sr_img_cut, svpath=save_path, svname=f'x{scale}_{cut_size1[0]}x{cut_size1[1]}_sr.png')
-        myutils.save_tenimage(imgTensor=bic_sr_img_cut, svpath=save_path, svname=f'x{scale}_{cut_size2[0]}x{cut_size2[1]}_bic.png')
+        near_sr_img_cut, cut_size3 = cut_img_dir(near_sr_img, cut_ratio[0], cut_ratio[1], cut_ratio[2], cut_ratio[3])
+        myutils.save_tenimage(imgTensor=sr_img_cut, svpath=save_path,
+                              svname=f'x{scale}_{cut_size1[0]}x{cut_size1[1]}_sr.png')
+        myutils.save_tenimage(imgTensor=bic_sr_img_cut, svpath=save_path,
+                              svname=f'x{scale}_{cut_size2[0]}x{cut_size2[1]}_bic.png')
+        myutils.save_tenimage(imgTensor=near_sr_img_cut, svpath=save_path,
+                              svname=f'x{scale}_{cut_size3[0]}x{cut_size3[1]}_near.png')
+        myutils.save_tenimage(imgTensor=img_lr, svpath=save_path,
+                              svname=f'x{scale}_{tmp_h}x{tmp_w}_input.png')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-001_exp01')
-    parser.add_argument('--ckpt_name', default='epoch-1000.pth')
-    parser.add_argument('--hr_path', default='test_imgs/benchmark_test/urban100_img004.png')
+    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-004_exp01')
+    parser.add_argument('--ckpt_name', default='epoch-480.pth')
+    parser.add_argument('--hr_path', default='test_imgs/div2k_test/0830.png')
     parser.add_argument('--cut_ratio', default=[0, 1, 0, 1])
     parser.add_argument('--scale_list', default=[4, 6, 8, 12, 16, 20, 24, 30])
     parser.add_argument('--gpu', default='2')

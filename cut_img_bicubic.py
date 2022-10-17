@@ -16,6 +16,12 @@ def resize_img(img, size):
             transforms.ToPILImage()(img_norm.squeeze(0)))).unsqueeze(0)
     return (ans-0.5)/0.5
 
+def resize_img_near(img, size):
+    img_norm = (img+1)/2
+    ans = transforms.ToTensor()(
+        transforms.Resize(size, InterpolationMode.NEAREST)(
+            transforms.ToPILImage()(img_norm.squeeze(0)))).unsqueeze(0)
+    return (ans-0.5)/0.5
 
 def bicubic_scale(img_path, scale, save_path):
     img = myutils.load_imageToten(img_path)

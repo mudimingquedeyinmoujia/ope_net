@@ -15,6 +15,7 @@ from test import single_img_sr
 import random
 import time
 from gpu_mem_track import MemTracker
+from cut_img_bicubic import resize_img_near
 
 
 def prepare_training():
@@ -56,6 +57,7 @@ def main(config_, save_path, args):
     img_lr = myutils.load_imageToten(args.lr_path).cuda()
     gpu_tracker.track()
     sr_img_bicubic = myutils.load_imageToten(args.lr_path, resize=(args.h, args.w)).cuda()
+    sr_img_near = resize_img_near(img_lr, size=(args.h, args.w)).cuda()
     bic_psnr = None
     bic_ssim = None
     if args.gt_path is not None:
@@ -70,6 +72,7 @@ def main(config_, save_path, args):
     lr_name = args.lr_path.split('/')[-1].split('.')[0]
     myutils.save_tenimage(sr_img, save_path, f'{lr_name}_SISR_{args.h}x{args.w}.png')
     myutils.save_tenimage(sr_img_bicubic, save_path, f'{lr_name}_bicubic_{args.h}x{args.w}.png')
+    myutils.save_tenimage(sr_img_near, save_path, f'{lr_name}_near_{args.h}x{args.w}.png')
     log_info = f'lr_path: {args.lr_path}, gt_path: {args.gt_path},\n psnr: {psnr}/{bic_psnr}, ssim: {ssim}/{bic_ssim}\n'
     log_info += f'encoder_time: {run_time[0]}, decoder_time: {run_time[1]}, all_time: {run_time[2]}\n'
     log(log_info)
@@ -83,8 +86,8 @@ if __name__ == '__main__':
     parser.add_argument('--gt_path', default='test_imgs/div2k_test/0880.png')
     parser.add_argument('--h', default=2040)
     parser.add_argument('--w', default=1356)
-    parser.add_argument('--gpu', default='1')
-    parser.add_argument('--flip', default=[1, 0, 1, 0])
+    parser.add_argument('--gpu', default='2')
+    parser.add_argument('--flip', default=[1, 1, 0, 1])
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
