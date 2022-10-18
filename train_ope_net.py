@@ -42,7 +42,18 @@ def make_data_loaders():
 
 
 def prepare_training():
-    if config.get('resume') is not None:
+    if config.get('resume_epoch') is not None:
+        sv_file = torch.load(config['resume'])
+        model = models.make(sv_file['model'], load_sd=True).cuda()
+        optimizer = utils.make_optimizer(
+            model.parameters(), config['optimizer'])
+        if config.get('multi_step_lr') is None:
+            lr_scheduler = None
+        else:
+            lr_scheduler = MultiStepLR(optimizer, **config['multi_step_lr'])
+        epoch_start = config['resume_epoch']
+
+    elif config.get('resume') is not None:
         sv_file = torch.load(config['resume'])
         model = models.make(sv_file['model'], load_sd=True).cuda()
         optimizer = utils.make_optimizer(
@@ -180,10 +191,10 @@ def main(config_, save_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/train-div2k-OPEnet/ablation/train_edsr-OPE-c.yaml')
+    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-012.yaml')
     parser.add_argument('--name', default=None)
     parser.add_argument('--tag', default='exp01')
-    parser.add_argument('--gpu', default='1')
+    parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu

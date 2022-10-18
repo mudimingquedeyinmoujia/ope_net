@@ -4,16 +4,16 @@ train_dataset:
     args:
       root_path: datasets/div2k/DIV2K_train_HR
       repeat: 20
-      cache: none
+      cache: in_memory
   wrapper:
     name: ope-sample-train
     args:
-      inp_size: 48
+      inp_size: 64
       scale_min: 4
       scale_max: 8
       augment: true
       norm: true
-      sample_q: 9216
+      sample_q: 16384
   batch_size: 16
 
 val_dataset:
@@ -22,7 +22,7 @@ val_dataset:
     args:
       root_path: ./datasets/div2k/DIV2K_valid_HR
       first_k: 10
-      repeat: 80
+      repeat: 160
       cache: in_memory
   wrapper:
     name: ope-patch-eval
@@ -39,9 +39,11 @@ model:
   args:
     max_freq: 3
     srnet_spec:
-      name: adaptive-edsr-baseline
+      name: rdn
       args:
         n_feats: 147
+        RDNconfig: B
+        RDNkSize: 3
 
 optimizer:
   name: adam

@@ -8,12 +8,12 @@ train_dataset:
   wrapper:
     name: ope-sample-train
     args:
-      inp_size: 48
+      inp_size: 56
       scale_min: 4
       scale_max: 8
       augment: true
       norm: true
-      sample_q: 9216
+      sample_q: 12544
   batch_size: 16
 
 val_dataset:

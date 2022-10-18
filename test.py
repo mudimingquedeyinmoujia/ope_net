@@ -13,6 +13,13 @@ import models
 import utils
 import time
 from cut_img_bicubic import resize_img
+import torch.nn as nn
+
+
+def check_updown(up_down):
+    ud = up_down.split('-')[0]  # bic / avg / none
+    ud_scale = int(up_down.split('-')[1])
+    return ud, ud_scale
 
 
 def eval_both_ope(loader, model):
@@ -45,8 +52,10 @@ def eval_both_ope(loader, model):
 
 def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=None):
     model.eval()
-    if up_down is None:
-        up_down = 1
+    ud = 'none'
+    ud_scale = 1
+    if up_down is not None:
+        ud, ud_scale = check_updown(up_down)
     metric_fn_ssim = utils.calc_ssim
     if eval_type is None:
         metric_fn_psnr = utils.calc_psnr
@@ -71,14 +80,22 @@ def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=None)
             batch_lr = batch['lr'].cuda()
             gt = batch['gt'].cuda()
             gt_size = gt.shape[-2:]
-            if up_down != 1:
-                pred, run_time = model.inference(batch_lr, h=gt_size[0] * up_down, w=gt_size[1] * up_down)
-                pred.clamp_(-1, 1)
-                pred = resize_img(pred, (gt_size[0], gt_size[1])).cuda()
-
-            else:
+            if ud == 'none':
                 pred, run_time = model.inference(batch_lr, h=gt_size[0], w=gt_size[1])
                 pred.clamp_(-1, 1)
+            elif ud == 'bic':
+                pred, run_time = model.inference(batch_lr, h=gt_size[0] * ud_scale, w=gt_size[1] * ud_scale)
+
+                pred = resize_img(pred, (gt_size[0], gt_size[1])).cuda()
+                pred.clamp_(-1, 1)
+            elif ud == 'avg':
+                pred, run_time = model.inference(batch_lr, h=gt_size[0] * ud_scale, w=gt_size[1] * ud_scale)
+                m = nn.AdaptiveAvgPool2d((gt_size[0], gt_size[1]))
+                pred = m(pred)
+                pred.clamp_(-1, 1)
+
+            else:
+                RuntimeError('updown fault')
 
             res_psnr = metric_fn_psnr((pred + 1) / 2, (gt + 1) / 2)
             res_ssim = metric_fn_ssim((pred + 1) / 2, (gt + 1) / 2, norm=False)
@@ -101,8 +118,10 @@ def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=None)
 
 def single_img_sr(lr_img, model, h, w, gt=None, up_down=None, flip=None):
     model.eval()
-    if up_down is None:
-        up_down = 1
+    ud = 'none'
+    ud_scale = 1
+    if up_down is not None:
+        ud, ud_scale = check_updown(up_down)
     with torch.no_grad():
         # pred, run_time = model.inference(lr_img, h=h, w=w)
         # pred.clamp_(-1, 1)
@@ -110,13 +129,22 @@ def single_img_sr(lr_img, model, h, w, gt=None, up_down=None, flip=None):
             pred, run_time = model.inference(lr_img, h=h, w=w, flip_conf=flip)
             pred.clamp_(-1, 1)
         else:
-            if up_down != 1:
-                pred, run_time = model.inference(lr_img, h=h * up_down, w=w * up_down)
-                pred.clamp_(-1, 1)
-                pred = resize_img(pred, (h, w)).cuda()
-            else:
+            if ud == 'none':
                 pred, run_time = model.inference(lr_img, h=h, w=w)
                 pred.clamp_(-1, 1)
+            elif ud == 'bic':
+                pred, run_time = model.inference(lr_img, h=h * ud_scale, w=w * ud_scale)
+
+                pred = resize_img(pred, (h, w)).cuda()
+                pred.clamp_(-1, 1)
+            elif ud == 'avg':
+                pred, run_time = model.inference(lr_img, h=h * ud_scale, w=w * ud_scale)
+                m = nn.AdaptiveAvgPool2d((h, w))
+                pred = m(pred)
+                pred.clamp_(-1, 1)
+
+            else:
+                RuntimeError('updown fault')
 
         if gt is not None:
             metric_fn_psnr = utils.calc_psnr
