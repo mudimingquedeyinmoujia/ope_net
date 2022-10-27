@@ -45,7 +45,8 @@ def main(exp_folder, test_config_list, test_ckpt):
             model = models.make(sv_file['model'], load_sd=True).cuda()
 
             test_psnr, test_ssim, test_run_time = test_both_ope(loader, model, log, log_name,
-                                                                eval_type=test_config.get('eval_type'), up_down=test_config.get('up_down'))
+                                                                eval_type=test_config.get('eval_type'),
+                                                                up_down=test_config.get('up_down'))
 
             log('test avg: psnr={:.4f}'.format(test_psnr), filename=log_name)
             log('test avg: ssim={:.4f}'.format(test_ssim), filename=log_name)
@@ -58,39 +59,39 @@ def main(exp_folder, test_config_list, test_ckpt):
 
 
 test_config_list = [
-    # 'test_CIR-SR-b100-x2.yaml',
-    # 'test_CIR-SR-b100-x3.yaml',
-    # 'test_CIR-SR-b100-x4.yaml',
-    # 'test_CIR-SR-b100-x6.yaml',
-    # 'test_CIR-SR-b100-x8.yaml',
-    # 'test_CIR-SR-div2k-x12.yaml',
-    # 'test_CIR-SR-div2k-x18.yaml',
+    'test_CIR-SR-b100-x2.yaml',
+    'test_CIR-SR-b100-x3.yaml',
+    'test_CIR-SR-b100-x4.yaml',
+    'test_CIR-SR-b100-x6.yaml',
+    'test_CIR-SR-b100-x8.yaml',
+    'test_CIR-SR-div2k-x12.yaml',
+    'test_CIR-SR-div2k-x18.yaml',
     # 'test_CIR-SR-div2k-x2.yaml',
-    # 'test_CIR-SR-div2k-x24.yaml',
+    'test_CIR-SR-div2k-x24.yaml',
     # 'test_CIR-SR-div2k-x3.yaml',
-    # 'test_CIR-SR-div2k-x30.yaml',
-    # 'test_CIR-SR-div2k-x4.yaml',
-    # 'test_CIR-SR-div2k-x6.yaml',
-    # 'test_CIR-SR-set14-x2.yaml',
-    # 'test_CIR-SR-set14-x3.yaml',
-    # 'test_CIR-SR-set14-x4.yaml',
-    # 'test_CIR-SR-set14-x6.yaml',
-    # 'test_CIR-SR-set14-x8.yaml',
-    # 'test_CIR-SR-set5-x2.yaml',
-    # 'test_CIR-SR-set5-x3.yaml',
-    # 'test_CIR-SR-set5-x4.yaml',
-    # 'test_CIR-SR-set5-x6.yaml',
-    # 'test_CIR-SR-set5-x8.yaml',
-    # 'test_CIR-SR-urban100-x2.yaml',
-    # 'test_CIR-SR-urban100-x3.yaml',
-    # 'test_CIR-SR-urban100-x4.yaml',
-    # 'test_CIR-SR-urban100-x6.yaml',
-    # 'test_CIR-SR-urban100-x8.yaml',
+    'test_CIR-SR-div2k-x30.yaml',
+    'test_CIR-SR-div2k-x4.yaml',
+    'test_CIR-SR-div2k-x6.yaml',
+    'test_CIR-SR-set14-x2.yaml',
+    'test_CIR-SR-set14-x3.yaml',
+    'test_CIR-SR-set14-x4.yaml',
+    'test_CIR-SR-set14-x6.yaml',
+    'test_CIR-SR-set14-x8.yaml',
+    'test_CIR-SR-set5-x2.yaml',
+    'test_CIR-SR-set5-x3.yaml',
+    'test_CIR-SR-set5-x4.yaml',
+    'test_CIR-SR-set5-x6.yaml',
+    'test_CIR-SR-set5-x8.yaml',
+    'test_CIR-SR-urban100-x2.yaml',
+    'test_CIR-SR-urban100-x3.yaml',
+    'test_CIR-SR-urban100-x4.yaml',
+    'test_CIR-SR-urban100-x6.yaml',
+    'test_CIR-SR-urban100-x8.yaml',
     # up_down avg
-    # 'up_down/avg/test_CIR-SR-set5-x2-avg2.yaml',
-    # 'up_down/avg/test_CIR-SR-b100-x2-avg2.yaml',
+    'up_down/avg/test_CIR-SR-set5-x2-avg2.yaml',
+    'up_down/avg/test_CIR-SR-b100-x2-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-b100-x2-avg3.yaml',
-    # 'up_down/avg/test_CIR-SR-b100-x3-avg2.yaml',
+    'up_down/avg/test_CIR-SR-b100-x3-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-b100-x3-avg3.yaml',
     # 'up_down/avg/test_CIR-SR-b100-x4-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-b100-x4-avg3.yaml',
@@ -101,24 +102,24 @@ test_config_list = [
     # 'up_down/avg/test_CIR-SR-div2k-x4-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-div2k-x4-avg3.yaml',
     'up_down/avg/test_CIR-SR-set14-x2-avg2.yaml',
-    'up_down/avg/test_CIR-SR-set14-x2-avg3.yaml',
+    # 'up_down/avg/test_CIR-SR-set14-x2-avg3.yaml',
     'up_down/avg/test_CIR-SR-set14-x3-avg2.yaml',
-    'up_down/avg/test_CIR-SR-set14-x3-avg3.yaml',
+    # 'up_down/avg/test_CIR-SR-set14-x3-avg3.yaml',
     # 'up_down/avg/test_CIR-SR-set14-x4-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-set14-x4-avg3.yaml',
     # 'up_down/avg/test_CIR-SR-set5-x2-avg3.yaml',
-    # 'up_down/avg/test_CIR-SR-set5-x3-avg2.yaml',
+    'up_down/avg/test_CIR-SR-set5-x3-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-set5-x3-avg3.yaml',
     # 'up_down/avg/test_CIR-SR-set5-x4-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-set5-x4-avg3.yaml',
-    # 'up_down/avg/test_CIR-SR-urban100-x2-avg2.yaml',
+    'up_down/avg/test_CIR-SR-urban100-x2-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-urban100-x2-avg3.yaml',
-    # 'up_down/avg/test_CIR-SR-urban100-x3-avg2.yaml',
+    'up_down/avg/test_CIR-SR-urban100-x3-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-urban100-x3-avg3.yaml',
     # 'up_down/avg/test_CIR-SR-urban100-x4-avg2.yaml',
     # 'up_down/avg/test_CIR-SR-urban100-x4-avg3.yaml',
     # up_down bic
-    'up_down/bic/test_CIR-SR-set14-x2-ud3.yaml',
+    # 'up_down/bic/test_CIR-SR-set14-x2-ud3.yaml',
     # 'up_down/bic/test_CIR-SR-b100-x2-ud2.yaml',
     # 'up_down/bic/test_CIR-SR-b100-x2-ud3.yaml',
     # 'up_down/bic/test_CIR-SR-b100-x3-ud2.yaml',
@@ -131,9 +132,9 @@ test_config_list = [
     # 'up_down/bic/test_CIR-SR-div2k-x3-ud3.yaml',
     # 'up_down/bic/test_CIR-SR-div2k-x4-ud2.yaml',
     # 'up_down/bic/test_CIR-SR-div2k-x4-ud3.yaml',
-    'up_down/bic/test_CIR-SR-set14-x2-ud2.yaml',
-    'up_down/bic/test_CIR-SR-set14-x3-ud2.yaml',
-    'up_down/bic/test_CIR-SR-set14-x3-ud3.yaml',
+    # 'up_down/bic/test_CIR-SR-set14-x2-ud2.yaml',
+    # 'up_down/bic/test_CIR-SR-set14-x3-ud2.yaml',
+    # 'up_down/bic/test_CIR-SR-set14-x3-ud3.yaml',
     # 'up_down/bic/test_CIR-SR-set14-x4-ud2.yaml',
     # 'up_down/bic/test_CIR-SR-set14-x4-ud3.yaml',
     # 'up_down/bic/test_CIR-SR-set5-x2-ud2.yaml',
@@ -152,8 +153,16 @@ test_config_list = [
 ]
 
 if __name__ == '__main__':
-    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
-    exp_folder = 'save/_train_rdn-OPE-001_exp01'
-    test_ckpt = 'epoch-1000.pth'
-    main(exp_folder=exp_folder, test_config_list=test_config_list, test_ckpt=test_ckpt)
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+    # exp_folder = 'save/_train_rdn-OPE-011_exp01'
+    # test_ckpt = 'epoch-605.pth'
+    # main(exp_folder=exp_folder, test_config_list=test_config_list, test_ckpt=test_ckpt)
     # print([f'up_down/bic/{i}' for i in os.listdir('configs/test-CIRnet/up_down/bic')])
+    # batch
+    exp_dict = {
+        'save/_train_rdn-OPE-011_exp01': ['epoch-605.pth', 'epoch-1000.pth'],
+        'save/_train_rdn-OPE-012_exp01': ['epoch-805.pth', 'epoch-990.pth'],
+    }
+    for key in exp_dict.keys():
+        for test_ckpt in exp_dict[key]:
+            main(exp_folder=key, test_config_list=test_config_list, test_ckpt=test_ckpt)

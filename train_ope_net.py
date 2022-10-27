@@ -191,10 +191,10 @@ def main(config_, save_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-012.yaml')
+    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-013.yaml')
     parser.add_argument('--name', default=None)
     parser.add_argument('--tag', default='exp01')
-    parser.add_argument('--gpu', default='0')
+    parser.add_argument('--gpu', default='1')
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
