@@ -1,0 +1,67 @@
+GPU Memory Track | 03-Nov-22-10:18:44 | Total Tensor Used Memory:113.1  Mb Total Allocated Memory:113.7  Mb
+
++ | 16 * Size:(64, 339, 3, 3)      | Memory: 11.917 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(147, 2352, 1, 1)    | Memory: 1.3189 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(147, 659, 1, 1)     | Memory: 5.9126 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 2 * Size:(147, 147, 3, 3)     | Memory: 1.4837 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 595, 3, 3)      | Memory: 20.917 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 147, 3, 3)      | Memory: 5.1679 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 128 * Size:(64,)                | Memory: 0.0312 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 275, 3, 3)      | Memory: 9.6679 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(147, 3, 3, 3)       | Memory: 0.0151 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 211, 3, 3)      | Memory: 7.4179 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 20 * Size:(147,)               | Memory: 0.0112 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 403, 3, 3)      | Memory: 14.167 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 467, 3, 3)      | Memory: 16.417 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 16 * Size:(64, 531, 3, 3)      | Memory: 18.667 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+
+At /home/sunlab/2021Studets/gaochao/sr_exp/ope_net/train_ope_net.py line 114: main Total Tensor Used Memory:113.1  Mb Total Allocated Memory:113.7  Mb
+
+
+At /home/sunlab/2021Studets/gaochao/sr_exp/ope_net/train_ope_net.py line 126: main Total Tensor Used Memory:113.1  Mb Total Allocated Memory:113.7  Mb
+
++ | 64 * Size:(64, 339, 3, 3)      | Memory: 47.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 211, 3, 3)      | Memory: 29.671 M | <class 'torch.Tensor'> | torch.float32
++ | 4 * Size:(147, 2352, 1, 1)    | Memory: 5.2756 M | <class 'torch.Tensor'> | torch.float32
++ | 8 * Size:(147, 147, 3, 3)     | Memory: 5.9350 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(147, 659, 1, 1)     | Memory: 23.650 M | <class 'torch.Tensor'> | torch.float32
++ | 4 * Size:(147, 2352, 1, 1)    | Memory: 5.2756 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 595, 3, 3)      | Memory: 83.671 M | <class 'torch.Tensor'> | torch.float32
++ | 8 * Size:(147, 147, 3, 3)     | Memory: 5.9350 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 403, 3, 3)      | Memory: 56.671 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(147, 659, 1, 1)     | Memory: 23.650 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 512 * Size:(64,)                | Memory: 0.125 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 80 * Size:(147,)               | Memory: 0.0448 M | <class 'torch.Tensor'> | torch.float32
++ | 4 * Size:(147, 3, 3, 3)       | Memory: 0.0605 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 467, 3, 3)      | Memory: 65.671 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 531, 3, 3)      | Memory: 74.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 595, 3, 3)      | Memory: 83.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 80 * Size:(147,)               | Memory: 0.0448 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 512 * Size:(64,)                | Memory: 0.125 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 275, 3, 3)      | Memory: 38.671 M | <class 'torch.Tensor'> | torch.float32
++ | 4 * Size:(147, 3, 3, 3)       | Memory: 0.0605 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 211, 3, 3)      | Memory: 29.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 339, 3, 3)      | Memory: 47.671 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 147, 3, 3)      | Memory: 20.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 531, 3, 3)      | Memory: 74.671 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 403, 3, 3)      | Memory: 56.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 147, 3, 3)      | Memory: 20.671 M | <class 'torch.Tensor'> | torch.float32
++ | 64 * Size:(64, 275, 3, 3)      | Memory: 38.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 64 * Size:(64, 467, 3, 3)      | Memory: 65.671 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 339, 3, 3)      | Memory: 11.917 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 1 * Size:(147, 2352, 1, 1)    | Memory: 1.3189 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(147, 659, 1, 1)     | Memory: 5.9126 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 2 * Size:(147, 147, 3, 3)     | Memory: 1.4837 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 595, 3, 3)      | Memory: 20.917 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 147, 3, 3)      | Memory: 5.1679 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 128 * Size:(64,)                | Memory: 0.0312 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 275, 3, 3)      | Memory: 9.6679 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 1 * Size:(147, 3, 3, 3)       | Memory: 0.0151 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 211, 3, 3)      | Memory: 7.4179 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 20 * Size:(147,)               | Memory: 0.0112 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 403, 3, 3)      | Memory: 14.167 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 467, 3, 3)      | Memory: 16.417 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+- | 16 * Size:(64, 531, 3, 3)      | Memory: 18.667 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+
+At /home/sunlab/2021Studets/gaochao/sr_exp/ope_net/train_ope_net.py line 190: main Total Tensor Used Memory:452.5  Mb Total Allocated Memory:463.2  Mb
+

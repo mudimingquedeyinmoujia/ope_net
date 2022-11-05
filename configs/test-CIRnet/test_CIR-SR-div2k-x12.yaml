@@ -8,4 +8,4 @@ test_dataset:
     args:
       test_scale: 12
   batch_size: 1
-eval_type: benchmark-12
+eval_type: div2k-12

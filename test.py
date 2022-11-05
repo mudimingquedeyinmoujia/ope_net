@@ -77,6 +77,7 @@ def test_both_ope(loader, model, log_fn, log_name, eval_type=None, up_down=None)
     id = 0
     with torch.no_grad():
         for batch in pbar:
+            torch.cuda.empty_cache()
             batch_lr = batch['lr'].cuda()
             gt = batch['gt'].cuda()
             gt_size = gt.shape[-2:]

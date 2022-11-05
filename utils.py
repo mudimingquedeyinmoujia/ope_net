@@ -8,7 +8,7 @@ import numpy as np
 from torch.optim import SGD, Adam
 from tensorboardX import SummaryWriter
 from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
-
+from my_ssim_metric import my_ssim_Y
 
 class Averager():
 
@@ -162,8 +162,8 @@ def calc_psnr(sr, hr, dataset=None, scale=1, rgb_range=1):
     return -10 * torch.log10(mse)
 
 
-ssim_metric = SSIM(data_range=1, size_average=True, channel=3)
-
+# ssim_metric = SSIM(data_range=1, size_average=True, channel=3)
+ssim_metric = my_ssim_Y
 
 def ssim_loss(sr, hr):
     return 1 - ssim_metric((sr + 1) / 2, (hr + 1) / 2)

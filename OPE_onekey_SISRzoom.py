@@ -57,6 +57,7 @@ def main(config_, save_path, args):
     cut_ratio = args.cut_ratio
     h, w = img_hr.shape[-2:]
     p_bar = tqdm(scale_list, leave=False)
+    json_dic = {}
     for scale in p_bar:
         p_bar.set_description(f'processing x{scale} ...')
         tmp_h = int(h // scale)
@@ -70,6 +71,7 @@ def main(config_, save_path, args):
         psnr_bic = metric_fn_psnr((bic_sr_img + 1) / 2, (img_hr + 1) / 2)
         ssim_bic = metric_fn_ssim((bic_sr_img + 1) / 2, (img_hr + 1) / 2, norm=False)
         log(f'scale: {scale}, psnr: {psnr_model}/{psnr_bic}, ssim: {ssim_model}/{ssim_bic}')
+        json_dic.update({f'x{scale}': [psnr_model.item(), psnr_bic.item(), ssim_model.item(), ssim_bic.item()]})
 
         sr_img_cut, cut_size1 = cut_img_dir(sr_img, cut_ratio[0], cut_ratio[1], cut_ratio[2], cut_ratio[3])
         bic_sr_img_cut, cut_size2 = cut_img_dir(bic_sr_img, cut_ratio[0], cut_ratio[1], cut_ratio[2], cut_ratio[3])
@@ -82,16 +84,17 @@ def main(config_, save_path, args):
                               svname=f'x{scale}_{cut_size3[0]}x{cut_size3[1]}_near.png')
         myutils.save_tenimage(imgTensor=img_lr, svpath=save_path,
                               svname=f'x{scale}_{tmp_h}x{tmp_w}_input.png')
+        myutils.save_json(os.path.join(save_path, 'test_value.json'), save_dic=json_dic)
 
 
-if __name__ == '__main__':
+def start_fn(exp_folder, ckpt, hr_path, gpu, save_index, scale_list):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-015_exp01')
-    parser.add_argument('--ckpt_name', default='epoch-1000.pth')
-    parser.add_argument('--hr_path', default='datasets/benchmark/Set5/HR/butterfly.png')
+    parser.add_argument('--exp_folder', default=exp_folder)
+    parser.add_argument('--ckpt_name', default=ckpt)
+    parser.add_argument('--hr_path', default=hr_path)
     parser.add_argument('--cut_ratio', default=[0, 1, 0, 1])
-    parser.add_argument('--scale_list', default=[4, 6, 8])
-    parser.add_argument('--gpu', default='0')
+    parser.add_argument('--scale_list', default=scale_list)
+    parser.add_argument('--gpu', default=gpu)
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
@@ -108,7 +111,20 @@ if __name__ == '__main__':
 
     ckpt_name_ = resume_path.split('/')[-1].split('.')[-2]
     img_hr_name = args.hr_path.split('/')[-1].split('.')[-2]
-    sub_save_folder = 'SISR-zoom_folder/' + ckpt_name_ + '/' + img_hr_name
+    sub_save_folder = f'{save_index}/' + ckpt_name_ + '/' + img_hr_name
     save_path = os.path.join(args.exp_folder, sub_save_folder)
 
     main(config, save_path, args)
+
+
+if __name__ == '__main__':
+    exp_folder = 'save/_train_rdn-OPE-015_exp01'
+    ckpt = 'epoch-780.pth'
+    gpu = '0'
+    scale_list = [4, 6, 8, 12, 18, 20, 24, 30]
+    save_index = 'SISR-onekey_div2k_zoom-1'
+    dataset_dir = 'datasets/div2k/DIV2K_valid_HR'
+    all_img_path = [os.path.join(dataset_dir, name) for name in sorted(os.listdir(dataset_dir))]
+    all_img_path = all_img_path[:3]
+    for img_path in all_img_path:
+        start_fn(exp_folder, ckpt, img_path, gpu, save_index, scale_list)

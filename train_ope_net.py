@@ -7,7 +7,7 @@ import torch.nn as nn
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import MultiStepLR
-
+from gpu_mem_track import MemTracker
 import datasets
 import models
 import utils
@@ -31,7 +31,7 @@ def make_data_loader(spec, tag=''):
     print(', '.join(info))
 
     loader = DataLoader(dataset, batch_size=spec['batch_size'],
-                        shuffle=(tag == 'train'), num_workers=8, pin_memory=True)
+                        shuffle=(tag == 'train'), num_workers=16, pin_memory=True)
     return loader
 
 
@@ -109,9 +109,9 @@ def main(config_, save_path):
         yaml.dump(config, f, sort_keys=False)
 
     train_loader, val_loader = make_data_loaders()
-
+    # gpu_tracker = MemTracker()
     model, optimizer, epoch_start, lr_scheduler = prepare_training()
-
+    # gpu_tracker.track()
     n_gpus = len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
     if n_gpus > 1:
         model = nn.parallel.DataParallel(model)
@@ -123,7 +123,7 @@ def main(config_, save_path):
     max_val_ssim = -1e18
 
     timer = utils.Timer()
-
+    # gpu_tracker.track()
     for epoch in range(epoch_start, epoch_max + 1):
         t_epoch_start = timer.t()
         log_info = ['epoch {}/{}'.format(epoch, epoch_max)]
@@ -158,7 +158,7 @@ def main(config_, save_path):
             torch.save(sv_file,
                        os.path.join(save_path, 'epoch-{}.pth'.format(epoch)))
 
-        if (epoch_val is not None) and (epoch % epoch_val == 0):
+        if (epoch_val is not None) and (epoch % epoch_val == -1):
             if n_gpus > 1 and (config.get('eval_bsize') is not None):
                 model_ = model.module
             else:
@@ -187,14 +187,15 @@ def main(config_, save_path):
 
         log(', '.join(log_info))
         writer.flush()
+        # gpu_tracker.track()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-013.yaml')
+    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-101.yaml')
     parser.add_argument('--name', default=None)
-    parser.add_argument('--tag', default='exp01')
-    parser.add_argument('--gpu', default='1')
+    parser.add_argument('--tag', default='exp_01')
+    parser.add_argument('--gpu', default='0,1')
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu

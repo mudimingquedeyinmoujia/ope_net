@@ -12,6 +12,7 @@ from datasets import register
 from utils import to_pixel_samples
 from torchvision.transforms import InterpolationMode
 
+
 def resize_fn(img, size):
     return transforms.ToTensor()(
         transforms.Resize(size, InterpolationMode.BICUBIC)(
@@ -210,7 +211,7 @@ class SRImplicitUniformVaried(Dataset):
 
 ####### train/eval
 # ope sample for train
-@register('ope-sample-train')
+@register('ope-sample-train') # abandoned
 class OPE_sample(Dataset):
 
     def __init__(self, dataset, inp_size=None, scale_min=1, scale_max=None,
@@ -257,6 +258,144 @@ class OPE_sample(Dataset):
             crop_lr = augment(crop_lr)
             crop_hr = augment(crop_hr)
 
+        hr_coord, hr_rgb = to_pixel_samples(crop_hr.contiguous())
+
+        if self.sample_q is not None:
+            sample_lst = np.random.choice(
+                len(hr_coord), self.sample_q, replace=False)
+            hr_coord = hr_coord[sample_lst]
+            hr_rgb = hr_rgb[sample_lst]
+
+        if self.norm:
+            crop_lr = (crop_lr - 0.5) / 0.5
+            hr_rgb = (hr_rgb - 0.5) / 0.5
+
+        sample_batch = {
+            'lr_img': crop_lr,
+            'coords_sample': hr_coord,
+            'gt_sample': hr_rgb
+        }
+
+        return sample_batch
+#
+@register('ope-sample-train-1')
+class OPE_sample_1(Dataset):
+
+    def __init__(self, dataset, inp_size=None, scale_min=1, scale_max=None,
+                 augment=True, norm=True, sample_q=None):
+        self.dataset = dataset
+        self.inp_size = inp_size
+        self.scale_min = scale_min
+        if scale_max is None:
+            scale_max = scale_min
+        self.scale_max = scale_max
+        self.augment = augment
+        self.sample_q = sample_q
+        self.norm = norm
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        img = self.dataset[idx]
+        ### prepare sample
+        s = random.uniform(self.scale_min, self.scale_max)
+
+        w_lr = self.inp_size
+        w_hr = round(w_lr * s)
+        x0 = random.randint(0, img.shape[-2] - w_hr)
+        y0 = random.randint(0, img.shape[-1] - w_hr)
+        crop_hr = img[:, x0: x0 + w_hr, y0: y0 + w_hr]
+        crop_lr = resize_fn(crop_hr, w_lr)  # img_lr_s
+
+
+        if self.augment:
+            hflip = random.random() < 0.5
+            vflip = random.random() < 0.5
+            dflip = random.random() < 0.5
+
+            def augment(x):
+                if hflip:
+                    x = x.flip(-2)
+                if vflip:
+                    x = x.flip(-1)
+                if dflip:
+                    x = x.transpose(-2, -1)
+                return x
+
+            crop_lr = augment(crop_lr)
+            crop_hr = augment(crop_hr)
+
+        crop_hr = resize_fn(crop_hr, w_lr * 8)
+        hr_coord, hr_rgb = to_pixel_samples(crop_hr.contiguous())
+
+        if self.sample_q is not None:
+            sample_lst = np.random.choice(
+                len(hr_coord), self.sample_q, replace=False)
+            hr_coord = hr_coord[sample_lst]
+            hr_rgb = hr_rgb[sample_lst]
+
+        if self.norm:
+            crop_lr = (crop_lr - 0.5) / 0.5
+            hr_rgb = (hr_rgb - 0.5) / 0.5
+
+        sample_batch = {
+            'lr_img': crop_lr,
+            'coords_sample': hr_coord,
+            'gt_sample': hr_rgb
+        }
+
+        return sample_batch
+
+@register('ope-sample-train-2')
+class OPE_sample_2(Dataset):
+
+    def __init__(self, dataset, inp_size=None, scale_min=1, scale_max=None,
+                 augment=True, norm=True, sample_q=None):
+        self.dataset = dataset
+        self.inp_size = inp_size
+        self.scale_min = scale_min
+        if scale_max is None:
+            scale_max = scale_min
+        self.scale_max = scale_max
+        self.augment = augment
+        self.sample_q = sample_q
+        self.norm = norm
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        img = self.dataset[idx]
+        ### prepare sample
+        s = random.uniform(self.scale_min, self.scale_max)
+
+        w_lr = self.inp_size
+        w_hr = round(w_lr * s)
+        x0 = random.randint(0, img.shape[-2] - w_hr)
+        y0 = random.randint(0, img.shape[-1] - w_hr)
+        crop_hr = img[:, x0: x0 + w_hr, y0: y0 + w_hr]
+        crop_lr = resize_fn(crop_hr, w_lr)  # img_lr_s
+
+
+        if self.augment:
+            hflip = random.random() < 0.5
+            vflip = random.random() < 0.5
+            dflip = random.random() < 0.5
+
+            def augment(x):
+                if hflip:
+                    x = x.flip(-2)
+                if vflip:
+                    x = x.flip(-1)
+                if dflip:
+                    x = x.transpose(-2, -1)
+                return x
+
+            crop_lr = augment(crop_lr)
+            crop_hr = augment(crop_hr)
+
+        crop_hr = resize_fn(crop_hr, w_hr * 4)
         hr_coord, hr_rgb = to_pixel_samples(crop_hr.contiguous())
 
         if self.sample_q is not None:
@@ -389,6 +528,54 @@ class SRcutPaired(Dataset):
             'gt': crop_hr,
         }
 
+
+# @register('sr-cut-downsampled-test')  # use for div2k/benchmark x6 x8 ... x20
+# class CutDownsampledTest(Dataset):
+#     def __init__(self, dataset, test_scale=None, augment=False, norm=True):
+#         self.dataset = dataset
+#         self.augment = augment
+#         self.norm = norm
+#         self.test_scale = test_scale
+# 
+#     def __len__(self):
+#         return len(self.dataset)
+# 
+#     def __getitem__(self, idx):
+#         img = self.dataset[idx]
+#         gt_h, gt_w = img.shape[-2:]
+#         lr_h = gt_h // self.test_scale
+#         lr_w = gt_w // self.test_scale
+#         crop_gt_h = lr_h * self.test_scale
+#         crop_gt_w = lr_w * self.test_scale
+#         crop_gt = img[:, :crop_gt_h, :crop_gt_w]
+#         crop_lr = resize_fn(crop_gt, (lr_h, lr_w))
+# 
+#         if self.augment:
+#             hflip = random.random() < 0.5
+#             vflip = random.random() < 0.5
+#             dflip = random.random() < 0.5
+# 
+#             def augment(x):
+#                 if hflip:
+#                     x = x.flip(-2)
+#                 if vflip:
+#                     x = x.flip(-1)
+#                 if dflip:
+#                     x = x.transpose(-2, -1)
+#                 return x
+# 
+#             crop_lr = augment(crop_lr)
+#             crop_gt = augment(crop_gt)
+# 
+#         if self.norm:
+#             crop_lr = (crop_lr - 0.5) / 0.5
+#             crop_gt = (crop_gt - 0.5) / 0.5
+# 
+#         return {
+#             'lr': crop_lr,
+#             'gt': crop_gt,
+#         }
+
 @register('sr-cut-downsampled-test')  # use for div2k/benchmark x6 x8 ... x20
 class CutDownsampledTest(Dataset):
     def __init__(self, dataset, test_scale=None, augment=False, norm=True):
@@ -402,13 +589,20 @@ class CutDownsampledTest(Dataset):
 
     def __getitem__(self, idx):
         img = self.dataset[idx]
-        gt_h, gt_w = img.shape[-2:]
-        lr_h = gt_h // self.test_scale
-        lr_w = gt_w // self.test_scale
-        crop_gt_h = lr_h * self.test_scale
-        crop_gt_w = lr_w * self.test_scale
-        crop_gt = img[:, :crop_gt_h, :crop_gt_w]
-        crop_lr = resize_fn(crop_gt, (lr_h, lr_w))
+        s = self.test_scale
+        h_lr = math.floor(img.shape[-2] / s + 1e-9)
+        w_lr = math.floor(img.shape[-1] / s + 1e-9)
+        img = img[:, :round(h_lr * s), :round(w_lr * s)]
+        img_down = resize_fn(img, (h_lr, w_lr))
+        crop_lr, crop_gt = img_down, img
+
+        # gt_h, gt_w = img.shape[-2:]
+        # lr_h = gt_h // self.test_scale
+        # lr_w = gt_w // self.test_scale
+        # crop_gt_h = lr_h * self.test_scale
+        # crop_gt_w = lr_w * self.test_scale
+        # crop_gt = img[:, :crop_gt_h, :crop_gt_w]
+        # crop_lr = resize_fn(crop_gt, (lr_h, lr_w))
 
         if self.augment:
             hflip = random.random() < 0.5
