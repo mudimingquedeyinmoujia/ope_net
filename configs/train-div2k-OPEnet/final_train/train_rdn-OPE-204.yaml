@@ -6,7 +6,7 @@ train_dataset:
       repeat: 20
       cache: in_memory
   wrapper:
-    name: ope-sample-train-2
+    name: ope-sample-train-3
     args:
       inp_size: 48
       scale_min: 1
@@ -42,6 +42,8 @@ model:
       name: rdn
       args:
         n_feats: 147
+        RDNconfig: B
+        RDNkSize: 3
 
 optimizer:
   name: adam
@@ -55,4 +57,4 @@ multi_step_lr:
   gamma: 0.5
 
 epoch_val: 1
-epoch_save: 10
+epoch_save: 20
