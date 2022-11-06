@@ -192,7 +192,7 @@ def main(config_, save_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', default='configs/train-div2k-OPEnet/train_rdn-OPE-101.yaml')
+    parser.add_argument('--config', default='configs/train-div2k-OPEnet/final_train/train_edsr-OPE-203.yaml')
     parser.add_argument('--name', default=None)
     parser.add_argument('--tag', default='exp_01')
     parser.add_argument('--gpu', default='0,1')
