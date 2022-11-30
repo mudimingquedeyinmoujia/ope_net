@@ -86,11 +86,11 @@ def main(config_, save_path, args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-015_exp01')
-    parser.add_argument('--ckpt_name', default='epoch-1000.pth')
-    parser.add_argument('--hr_path', default='datasets/benchmark/Set5/HR/butterfly.png')
+    parser.add_argument('--exp_folder', default='save/_train_edsr-OPE-abl-b-resume_exp01')
+    parser.add_argument('--ckpt_name', default='epoch-600.pth')
+    parser.add_argument('--hr_path', default='datasets/benchmark/Set14/HR/zebra.png')
     parser.add_argument('--cut_ratio', default=[0, 1, 0, 1])
-    parser.add_argument('--scale_list', default=[4, 6, 8])
+    parser.add_argument('--scale_list', default=[4, 6, 8, 10, 14, 16, 20])
     parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
 

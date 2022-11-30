@@ -117,14 +117,14 @@ def main(config_, save_path, args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-001_exp01')
-    parser.add_argument('--ckpt_name', default='epoch-500.pth')
-    parser.add_argument('--lr_path', default='test_imgs/scale_test/0810_cut_1075x1224_53x61.png')
-    parser.add_argument('--tag', default='1')
+    parser.add_argument('--exp_folder', default='save/_train_rdn-OPE-014_exp02')
+    parser.add_argument('--ckpt_name', default='epoch-1000.pth')
+    parser.add_argument('--lr_path', default='test_imgs/scale_test/0882_rect_64x64.png')
+    parser.add_argument('--tag', default='2')
     parser.add_argument('--scale', default=20)
     parser.add_argument('--step', default=0.2)
     parser.add_argument('--frame', default=10)
-    parser.add_argument('--gpu', default='2')
+    parser.add_argument('--gpu', default='0')
     args = parser.parse_args()
 
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu

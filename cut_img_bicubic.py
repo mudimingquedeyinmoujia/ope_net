@@ -79,11 +79,11 @@ def near_scale(loadpath, h, w):
 
 if __name__ == '__main__':
     # cut_img
-    # cut_path = 'datasets/div2k/DIV2K_valid_HR/0810.png'
-    # cut_img(cut_path, h_1=0.1,h_2=0.8, w_1=0.1, w_2=0.7)
+    # cut_path = 'datasets/div2k/DIV2K_valid_HR/0803.png'
+    # cut_img(cut_path, h_1=0, h_2=1, w_1=0.13, w_2=0.84)
 
     # scale img
-    img_path = 'test_imgs/pre_cut/0810_cut_1075x1224.png'
-    scale = 20
+    img_path = 'test_imgs/div2k_test/0882_rect.png'
+    scale = 26.5
     save_path = 'test_imgs/scale_test'
     bicubic_scale(img_path=img_path, scale=scale, save_path=save_path)

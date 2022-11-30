@@ -395,7 +395,7 @@ class OPE_sample_2(Dataset):
             crop_lr = augment(crop_lr)
             crop_hr = augment(crop_hr)
 
-        crop_hr = resize_fn(crop_hr, w_hr * 4)
+        crop_hr = resize_fn(crop_hr, w_hr * 3)
         hr_coord, hr_rgb = to_pixel_samples(crop_hr.contiguous())
 
         if self.sample_q is not None:

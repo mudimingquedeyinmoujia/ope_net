@@ -118,13 +118,13 @@ def start_fn(exp_folder, ckpt, hr_path, gpu, save_index, scale_list):
 
 
 if __name__ == '__main__':
-    exp_folder = 'save/_train_rdn-OPE-015_exp01'
-    ckpt = 'epoch-780.pth'
-    gpu = '0'
-    scale_list = [4, 6, 8, 12, 18, 20, 24, 30]
-    save_index = 'SISR-onekey_div2k_zoom-1'
-    dataset_dir = 'datasets/div2k/DIV2K_valid_HR'
+    exp_folder = 'save/final_rdn_ope'
+    ckpt = 'epoch-960.pth'
+    gpu = '2'
+    scale_list = [2, 3, 4, 6, 8]
+    save_index = 'SISR-onekey_urban100_zoom-all'
+    dataset_dir = 'datasets/benchmark/Urban100/HR'
     all_img_path = [os.path.join(dataset_dir, name) for name in sorted(os.listdir(dataset_dir))]
-    all_img_path = all_img_path[:3]
+    # all_img_path = all_img_path[:3]
     for img_path in all_img_path:
         start_fn(exp_folder, ckpt, img_path, gpu, save_index, scale_list)
